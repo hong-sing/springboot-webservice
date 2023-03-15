@@ -1,8 +1,14 @@
 package com.ewok.study.springboot.domain.posts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface PostsRepository extends JpaRepository<Posts, Long> {
+
+    @Query("SELECT p FROM Posts p ORDER BY p.id DESC")
+    List<Posts> findAllDesc();
 }
 
 /*
@@ -12,4 +18,11 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @Repository를 추가할 필요 없음
     Entity클래스와 Entity Repository는 함께 위치 해야 함
     Entity클래스는 기본 Repository없이는 제대로 역할을 할 수 없음
+ */
+
+/*
+    SpringDataJpa에서 제공하지 않는 메소드는 쿼리로 작성해도 된다.
+    @Query
+
+    10줄 코드는 SpringDataJpa에서 제공하는 메소드로 해결할 수 있다.
  */

@@ -2,12 +2,16 @@ package com.ewok.study.springboot.service.posts;
 
 import com.ewok.study.springboot.domain.posts.Posts;
 import com.ewok.study.springboot.domain.posts.PostsRepository;
+import com.ewok.study.springboot.web.dto.PostsListResponseDto;
 import com.ewok.study.springboot.web.dto.PostsResponseDto;
 import com.ewok.study.springboot.web.dto.PostsSaveRequestDto;
 import com.ewok.study.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -29,6 +33,13 @@ public class PostsService {
         Posts entity = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
         return new PostsResponseDto(entity);
+    }
+
+    @Transactional(readOnly = true) // readOnly = true 트랙잭션 범위는 유지하되, 조회기능만 남겨 조회 속도 개선. / 등록, 수정, 삭제 기능이 없는 서비스 메소드에서 사용 추천
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
 

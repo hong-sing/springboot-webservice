@@ -1,14 +1,21 @@
 package com.ewok.study.springboot.web;
 
+import com.ewok.study.springboot.service.posts.PostsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@RequiredArgsConstructor
 @Controller
 public class IndexController {
 
+    private final PostsService postsService;
+
     @GetMapping("/")
-    public String index() {
-        return "index";
+    public String index(Model model) {  // Model : 서버 템플릿 엔진에서 사용할 수 있는 객체를 저장
+        model.addAttribute("posts", postsService.findAllDesc());    // postsService.findAllDesc()로 가져온 결과를 posts로
+        return "index"; // index.mustache로 전달
     }
 
     @GetMapping("/posts/save")
