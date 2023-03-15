@@ -18,6 +18,7 @@ repositories {  // 각종 의존성(라이브러리)들을 어떤 원격 저장�
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+    implementation('org.springframework.boot:spring-boot-starter-mustache')
 
     // lombok
     implementation('org.projectlombok:lombok')
