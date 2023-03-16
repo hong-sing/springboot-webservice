@@ -44,3 +44,4 @@ bin/
 /.idea/gradle.xml
 /.idea/misc.xml
 /.idea/encodings.xml
+/src/main/resources/application-oauth.properties
