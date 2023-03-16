@@ -1,5 +1,6 @@
 package com.ewok.study.springboot.web;
 
+import com.ewok.study.springboot.config.auth.LoginUser;
 import com.ewok.study.springboot.config.auth.dto.SessionUser;
 import com.ewok.study.springboot.service.posts.PostsService;
 import com.ewok.study.springboot.web.dto.PostsResponseDto;
@@ -17,12 +18,11 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
 
     private final PostsService postsService;
-    private final HttpSession httpSession;
 
-    @GetMapping("/")
-    public String index(Model model) {  // Model : 서버 템플릿 엔진에서 사용할 수 있는 객체를 저장
+    @GetMapping("/")                // 3
+    public String index(Model model, @LoginUser SessionUser user) {  // Model : 서버 템플릿 엔진에서 사용할 수 있는 객체를 저장
         model.addAttribute("posts", postsService.findAllDesc());    // postsService.findAllDesc()로 가져온 결과를 posts로
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");  // 1
+//        SessionUser user = (SessionUser) httpSession.getAttribute("user");  // 1
         if (user != null) { // 2
             model.addAttribute("userName", user.getName());
         }
@@ -54,4 +54,8 @@ public class IndexController {
     2. if (user != null)
         - 세션에 저장된 값이 있을 때만 model에 userName으로 등록한다.
         - 세션에 저장된 값이 없음녀 model엔 아무런 값이 없는 상태이니 로그인 버튼이 보이게 된다.
+
+    3. @LoginUser SessionUser user
+        - 기존에 (SessionUser) httpSession.getAttribute("user")로 가져오던 세션 정보 값이 개선됨
+        - 이제는 어느 컨트롤러든지 @LoginUser만 사용하면 세션 정보를 가져올 수 있게 됨
  */
