@@ -1,9 +1,13 @@
 package com.ewok.study.springboot.web;
 
+import com.ewok.study.springboot.config.auth.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -12,12 +16,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = HomeController.class)
+@WebMvcTest(controllers = HomeController.class, excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
 public class HomeControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
+    @WithMockUser(roles = "USER")
     @Test
     public void hello가_리턴된다() throws Exception {
         String hello = "hello";
@@ -27,6 +32,7 @@ public class HomeControllerTest {
                 .andExpect(content().string(hello));
     }
 
+    @WithMockUser(roles = "USER")
     @Test
     public void helloDto가_리턴된다() throws Exception {
         String name = "hello";
@@ -54,4 +60,6 @@ public class HomeControllerTest {
         - 여기서는 name과 amount를 검증하니 $.name, $.amount로 검증
 
     https://github.com/hong-sing/springboot-webservice/wiki/2.-%ED%85%8C%EC%8A%A4%ED%8A%B8%EC%BD%94%EB%93%9C
+
+    @WebMvcTest의 secure 옵션은 2.1쿠터 Deprecated 되었다.
  */
