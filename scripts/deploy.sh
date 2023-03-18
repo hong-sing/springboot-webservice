@@ -1,13 +1,13 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app/step2
-PROJECT_NAME=aws-web-service #해당 위치에 properties에 작성한 프로젝트명과 동일하게 작성합니다.
+PROJECT_NAME=springboot-webservice #해당 위치에 properties에 작성한 프로젝트명과 동일하게 작성합니다.
 
 echo "> Build 파일 복사"
 cp $REPOSITORY/zip/*.jar $REPOSITORY/
 
 echo "> 현재 구동 중인 애플리케이션 pid 확인"
-CURRENT_PID=$(pgrep -f $PROJECT_NAME)
+CURRENT_PID=$(pgrep -fl RestApiPractice | grep java | awk '{print $1}')
 
 echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
 
