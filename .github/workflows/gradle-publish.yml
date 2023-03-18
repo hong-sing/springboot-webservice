@@ -1,4 +1,3 @@
-# main.yml의 최상단입니다.
 env:  
   S3_BUCKET_NAME: build-springboot-webservice
   PROJECT_NAME: springboot-webservice
@@ -36,10 +35,8 @@ jobs:
       shell: bash
 
     - name: Build with Gradle
-      run: ./gradlew clean build -x test
-      shell: bash
-      
-    # 이전에 추가했던 내용 아래에 작성하면 됩니다.
+      run: ./gradlew clean -x test build
+      shell: bash      
     
     - name: Get current time
       uses: 1466587594/get-current-time@v2
@@ -49,15 +46,15 @@ jobs:
         utcOffset: "+09:00"
         
     - name: Show Current Time
-      run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}" # (10)
+      run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
       shell: bash
-    # 아래부분이 추가되는 내용입니다.
+      
     - name: Make zip file
-      run: zip -r ./$PROJECT_NAME.zip .         # (12)
+      run: zip -r ./$PROJECT_NAME.zip .
       shell: bash
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1      #(13)
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
