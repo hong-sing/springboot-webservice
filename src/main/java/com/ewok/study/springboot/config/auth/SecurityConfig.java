@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @RequiredArgsConstructor
 @EnableWebSecurity  // Spring Security 설정들을 활성화시켜 준다.
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {  // 방식 변경됨
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
@@ -27,6 +27,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 }
+
+/*
+    WebSecurityConfigurerAdapter는 deprecated가 되어, 상속을 받지 않고 모두 Bean으로 등록하여 사용하는 방식으로 변경되었다.
+
+    @RequiredArgsConstructor
+    @EnableWebSecurity
+    public class SecurityConfig {
+
+        private final CustomOAuth2UserService customOAuth2UserService;
+
+        @Bean
+        public SecurityFilterChain newFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .headers().frameOptions().disable()
+                .and()
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile").permitAll()
+                        .antMatchers("/api/v1/**").hasRole(Role.USER.name())
+                        .anyRequest().authenticated())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/"))
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .userInfoEndpoint()
+                        .userService(customOAuth2UserService));
+
+        return http.build();
+    }
+    }
+ */
 
 /*
     antMatchers
